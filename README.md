@@ -1,4 +1,4 @@
 Phaser.js Sample
 ===
 
-Phaser.js sample 
+Flappy Bird

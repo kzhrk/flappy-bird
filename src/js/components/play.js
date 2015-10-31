@@ -1,0 +1,90 @@
+/*!
+ * @fileOverview Play
+ * @author Kazuhiro Kobayashi
+ */
+ var Bird = require('./bird');
+ var Ground = require('./ground');
+ var PipeGroup = require('./pipeGroup');
+
+function Play () {}
+
+Play.prototype = {
+  create: function () {
+
+    // add gravity
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.game.physics.arcade.gravity.y = 1200;
+
+    // add a background
+    this.background = this.game.add.sprite(0,0,'background');
+
+    // add a bard
+    this.bird = new Bird(this.game, 100, 100);
+    this.game.add.existing(this.bird);
+
+    // add a ground
+    this.ground = new Ground(this.game, 0, 384, 335, 112);
+    this.game.add.existing(this.ground);
+
+    // pipe group
+    this.pipes = this.game.add.group();
+
+    //
+    this.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
+
+    //
+    var flapKey = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    flapKey.onDown.add(this.bird.flap, this.bird);
+
+    //
+    this.input.onDown.add(this.bird.flap, this.bird);
+
+    // add a timer
+    this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.25, this.generatePipes, this);
+    this.pipeGenerator.timer.start();
+
+    // add score
+    this.score = 0;
+    this.scoreText = this.game.add.bitmapText(this.game.width/2, 10, 'flappyfont',this.score.toString(), 24);
+    this.scoreText.visible = true;
+
+    // add sound
+    this.scoreSound = this.game.add.audio('score');
+  },
+  update: function () {
+    this.game.physics.arcade.collide(this.bird, this.ground, this.deathHandler, null, this);
+
+    this.pipes.forEach(function (pipeGroup) {
+      this.checkScore(pipeGroup);
+      this.game.physics.arcade.collide(this.bird, pipeGroup, this.deathHandler, null, this);
+    }, this);
+  },
+  checkScore: function (pipeGroup) {
+    if (pipeGroup.exists && !pipeGroup.hasScored && pipeGroup.topPipe.world.x <= this.bird.world.x) {
+      pipeGroup.hasScored = true;
+      this.score ++;
+      this.scoreText.setText(this.score.toString());
+      this.scoreSound.play();
+    }
+  },
+  generatePipes: function () {
+    var pipeY = this.game.rnd.integerInRange(-100, 100);
+    var pipeGroup = this.pipes.getFirstExists(false);
+
+    if (!pipeGroup) {
+      pipeGroup = new PipeGroup(this.game, this.pipes);
+    }
+    pipeGroup.reset(this.game.width + pipeGroup.width/2, pipeY);
+  },
+  deathHandler: function () {
+    this.shutdown();
+  },
+  shutdown: function () {
+    this.game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
+    this.bird.destroy();
+    this.pipes.destroy();
+    this.game.state.start('gameover');
+  }
+};
+
+module.exports = Play;
