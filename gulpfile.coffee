@@ -2,7 +2,6 @@
 gulp      = require 'gulp'
 webserver = require 'gulp-webserver'
 webpack   = require 'gulp-webpack'
-babel     = require 'gulp-babel'
 jade      = require 'gulp-jade'
 uglify    = require 'gulp-uglify'
 imagemin  = require 'gulp-imagemin'
