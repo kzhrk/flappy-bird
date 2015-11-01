@@ -57,7 +57,7 @@ gulp.task 'image', ->
 
 gulp.task 'ghPages', ->
   gulp
-    .src './public'
+    .src './public/**/*'
     .pipe ghPages()
 
 gulp.task 'build', ['copy', 'webpack', 'jade', 'image']
