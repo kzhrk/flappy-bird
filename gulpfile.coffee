@@ -29,9 +29,9 @@ gulp.task 'webpack', ->
       resolve:
         extensions: ['', '.js']
     )
-    # .pipe uglify(
-    #   preserveComments: 'license'
-    # )
+    .pipe uglify(
+      preserveComments: 'license'
+    )
     .pipe gulp.dest './public/js'
 
 gulp.task 'jade', ->
