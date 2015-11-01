@@ -2,18 +2,23 @@
  * @fileOverview Pipe
  * @author Kazuhiro Kobayashi
  */
-function Pipe (game, x, y, frame) {
+var Pipe = function (game, x, y, frame) {
   'use strict';
 
-  var result = new Phaser.Sprite(game, x, y, 'pipe', frame);
+  Phaser.Sprite.call(this, game, x, y, 'pipe', frame);
+  this.anchor.setTo(0.5, 0.5);
+  this.game.physics.arcade.enableBody(this);
 
-  result.anchor.setTo(0.5, 0.5);
-  result.game.physics.arcade.enableBody(result);
+  this.body.allowGravity = false;
+  this.body.immovable = true;
+};
 
-  result.body.allowGravity = false;
-  result.body.immovable = true;
+Pipe.prototype = Object.create(Phaser.Sprite.prototype);
+Pipe.prototype.constructor = Pipe;
 
-  return result;
-}
+Pipe.prototype.update = function() {
+  // write your prefab's specific update code here
+
+};
 
 module.exports = Pipe;

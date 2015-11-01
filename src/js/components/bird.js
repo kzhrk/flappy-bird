@@ -5,28 +5,47 @@
 function Bird (game, x, y, frame) {
   'use strict';
 
-  var result = new Phaser.Sprite(game, x, y, 'bird', frame);
-  result.anchor.setTo(0.5, 0.5);
-  result.animations.add('flap');
-  result.animations.play('flap', 12, true);
+  Phaser.Sprite.call(this, game, x, y, 'bird', frame);
 
-  game.physics.arcade.enableBody(result);
+  this.anchor.setTo(0.5, 0.5);
 
-  result.checkWorldBounds = true;
-  result.outOfBoundsKill = true;
+  this.name = 'bird';
+  this.alive = false;
+  this.onGround= false;
 
-  result.flap = function () {
-    result.body.velocity.y = -400;
-    game.add.tween(this).to({angle: -40}, 100).start();
-  };
+  // add animation
+  this.animations.add('flap');
+  this.animations.play('flap', 12, true);
 
-  result.update = function (){
-    if(result.angle < 90) {
-      result.angle += 2.5;
-    }
-  };
+  this.game.physics.arcade.enableBody(this);
+  this.body.allowGravity = true;
+  this.body.collideWorldBounds = true;
 
-  return result;
+  this.events.onKilled.add(this.onKilled, this);
 }
+
+Bird.prototype = Object.create(Phaser.Sprite.prototype);
+Bird.prototype.constructor = Bird;
+
+Bird.prototype.update = function () {
+  if(this.angle < 90 && this.alive) {
+    this.angle += 2.5;
+  }
+  if (!this.alive) {
+    this.body.velocity.x = 0;
+  }
+};
+Bird.prototype.flap = function () {
+  if (!!this.alive) {
+    this.body.velocity.y = -400;
+    this.game.add.tween(this).to({angle: -40}, 100).start();
+  }
+};
+Bird.prototype.onKilled = function () {
+  this.exists = true;
+  this.visible = true;
+  this.animations.stop();
+  this.game.add.tween(this).to({angle: 90}, (90/this.y*300)).start();
+};
 
 module.exports = Bird;

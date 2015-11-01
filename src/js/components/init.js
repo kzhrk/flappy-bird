@@ -14,12 +14,20 @@ Init.prototype = {
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
+
+    // load image
     this.load.image('background', 'assets/img/bg.png');
     this.load.image('ground', 'assets/img/ground.png');
+    this.load.image('gameover', 'assets/img/gameover.png');
+    this.load.image('startButton', 'assets/img/btn_start.png');
     this.load.spritesheet('bird', 'assets/img/bird.png', 36,26,3);
     this.load.spritesheet('pipe', 'assets/img/pipes.png', 52,320,2);
+
+
+    // load fonts
     this.load.bitmapFont('flappyfont', 'assets/fonts/flappyfont/flappyfont.png', 'assets/fonts/flappyfont/flappyfont.fnt');
 
+    // load audio
     this.load.audio('score', 'assets/audio/score.wav');
     this.load.audio('flap', 'assets/audio/flap.wav');
     this.load.audio('pipeHit', 'assets/audio/pipe-hit.wav');

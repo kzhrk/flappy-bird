@@ -17,26 +17,20 @@ function Menu () {
       this.ground.autoScroll(-200,0);
 
       // add text
-      this.text = this.game.add.text(0, 0, 'Flappy Bird', {
-        font: '32px Arial',
-        fill: '#333',
-        wordWrap: true,
-        wordWrapWidth: this.ground.width,
-        align: 'center'
-      });
-      this.text.x = this.game.world.width / 2 - this.text.width/2;
-      this.text.y = this.game.world.height / 2 - this.text.height/2;
-
-      // add event to text
-      this.text.inputEnabled = true;
-      this.text.events.onInputDown.add(this.onClickStart, this);
+      this.title = this.game.add.bitmapText(this.game.width/2, 180, 'flappyfont', 'Flappy Bird', 42);
+      this.title.anchor.setTo(0.5, 0.5);
 
       // add bird
-      this.bird = this.add.sprite(200, 5, 'bird');
-
-      // bird animation
+      this.bird = this.add.sprite(this.game.world.width/2, 300, 'bird');
+      this.bird.anchor.setTo(0.5, 0.5);
       this.bird.animations.add('flap');
       this.bird.animations.play('flap', 12, true);
+
+      // add start button
+      this.startBtn = this.game.add.sprite(this.game.world.width/2, this.game.world.height/2, 'startButton');
+      this.startBtn.anchor.setTo(0.5, 0.5);
+      this.startBtn.inputEnabled = true;
+      this.startBtn.events.onInputDown.add(this.onClickStart, this);
     },
     update : function () {
     },

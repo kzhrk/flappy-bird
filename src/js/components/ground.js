@@ -2,24 +2,26 @@
  * @fileOverview Ground
  * @author Kazuhiro Kobayashi
  */
-function Ground (game, x, y, width, height, frame) {
+
+var Ground = function (game, x, y, width, height) {
   'use strict';
 
-  var result = new Phaser.TileSprite(game, x, y, width, height, 'ground', frame);
+  Phaser.TileSprite.call(this, game, x, y, width, height, 'ground');
 
   // start scroll
-  result.autoScroll(-200, 0);
+  this.autoScroll(-200, 0);
 
   // physics
-  game.physics.arcade.enableBody(result);
+  this.game.physics.arcade.enableBody(this);
 
   // not to be affected by gravity
-  result.body.allowGravity = false;
+  this.body.allowGravity = false;
 
   // stop moving
-  result.body.immovable = true;
+  this.body.immovable = true;
+};
 
-  return result;
-}
+Ground.prototype = Object.create(Phaser.TileSprite.prototype);
+Ground.prototype.constructor = Ground;
 
 module.exports = Ground;
